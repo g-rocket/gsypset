@@ -30,6 +30,7 @@
 \RequirePackage{siunitx}
 \sisetup{per-mode=fraction}
 \sisetup{qualifier-mode=space}
+\sisetup{retain-explicit-plus}
 \DeclareSIUnit{\degreeFarenheight}{\textdegree{}F}
 \DeclareSIUnit{\Rxn}{Rxn}
 \DeclareSIUnit{\M}{M}
