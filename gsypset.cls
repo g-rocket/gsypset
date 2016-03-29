@@ -11,11 +11,12 @@
 \DeclareOption{problemtitles}{\gsy@problemtitlestrue}
 \DeclareOption{printing}{\gsy@printingtrue}
 \DeclareOption{blanks}{\gsy@blankstrue}
+\DeclareOption{microtype}{\RequirePackage{microtype}}
 \ProcessOptions\relax
 
 \RequirePackage{geometry}
 \geometry{letterpaper,top=1in,bottom=1in,left=1in,right=1in,headheight=18pt,footskip=24pt}
-\RequirePackage{microtype}
+%\RequirePackage{microtype}
 \RequirePackage[onehalfspacing]{setspace}
 \RequirePackage{kpfonts}
 %\RequirePackage{lmodern}
