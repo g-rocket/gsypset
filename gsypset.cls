@@ -6,12 +6,14 @@
 \newif\ifgsy@problemtitles
 \newif\ifgsy@printing
 \newif\ifgsy@blanks
+\newif\ifgsy@needsproblem\gsy@needsproblemtrue
 \DeclareOption{oneperpage}{\gsy@oneperpagetrue}
 \DeclareOption{extratitles}{\gsy@problemtitlestrue}
 \DeclareOption{problemtitles}{\gsy@problemtitlestrue}
 \DeclareOption{printing}{\gsy@printingtrue}
 \DeclareOption{blanks}{\gsy@blankstrue}
 \DeclareOption{microtype}{\RequirePackage{microtype}}
+\DeclareOption{fullproblemnames}{\gsy@needsproblemfalse}
 \ProcessOptions\relax
 
 \RequirePackage{geometry}
@@ -83,12 +85,12 @@
 
 \newcommand{\gsy@problems}{%
 	\ifundef{\gsy@firstproblemnumber}{%
-		Problem \gsy@problemnumber{} (continued)%
+		\ifgsy@needsproblem{Problem }\fi\gsy@problemnumber{} (continued)%
 	}{%
 		\IfStrEq{\gsy@problemnumber}{\gsy@firstproblemnumber}{%
-			Problem \gsy@problemnumber%
+			\ifgsy@needsproblem{Problem }\fi\gsy@problemnumber%
 		}{%
-			Problems \gsy@firstproblemnumber{} -- \gsy@problemnumber%
+			\ifgsy@needsproblem{Problems }\fi\gsy@firstproblemnumber{} -- \gsy@problemnumber%
 		}%
 	}%
 	\global\undef\gsy@firstproblemnumber%
@@ -104,6 +106,7 @@
 % problem and solution environments
 \newcounter{gsy@problemnumber}\stepcounter{gsy@problemnumber}
 \global\newtoggle{gsy@hassubproblems}
+\global\newtoggle{gsy@lastsubproblemhadsolution}
 \newenvironment{problem}[1][\arabic{gsy@problemnumber}]{%
 	\global\togglefalse{gsy@hassubproblems}%
 	\gsy@updateproblemnumbers{#1}%
@@ -113,6 +116,9 @@
 	\fi%
 }{%
 	\iftoggle{gsy@hassubproblems}{%
+		\nottoggle{gsy@lastsubproblemhadsolution}{%
+			\vfill
+		}{}%
 		\ifgsy@oneperpage%
 			\newpage%
 		\fi%
@@ -122,7 +128,7 @@
 	\global\togglefalse{gsy@hassubproblems}%
 }
 
-\newenvironment{subproblems}[1][A)]{%
+\newenvironment{subproblems}[1][(a)]{%
 	\global\toggletrue{gsy@hassubproblems}%
 	\enumerate[#1]%
 }{%
@@ -130,11 +136,13 @@
 }
 
 \newcommand{\subproblem}{%
+	\global\togglefalse{gsy@lastsubproblemhadsolution}%
 	\item%
 }
 
 \newenvironment{solution}[1][10em]{%
 	\iftoggle{gsy@hassubproblems}{%
+		\global\toggletrue{gsy@lastsubproblemhadsolution}%
 		\vspace{.5\baselineskip}\hrule%
 		\ifgsy@printing%
 			\vspace{#1}%
@@ -196,9 +204,25 @@
 
 % underlined phantom text (make a blank) with \buline
 \RequirePackage[normalem]{ulem}
-\newcommand{\blankline}[1]{\uline{\phantom{#1}}}
-\newcommand{\blankbox}[1]{\fbox{\phantom{#1}}}
-\newcommand{\blank}[1]{\phantom{#1}}
+\newlength{\gsy@widthofcurrentblank}
+\newcommand{\blankline}[2][0px]{\uline{\blank[#1]{#2}}}
+\newcommand{\blankbox}[2][0px]{\fbox{\blank[#1]{#2}}}
+\newcommand{\blank}[2][0pt]{%
+	\settowidth{\gsy@widthofcurrentblank}{#2}%
+	\ifdim\gsy@widthofcurrentblank<#1%
+		\ifgsy@printing%
+			\hspace{#1}%
+		\else
+			#2\hspace{\dimexpr(#1)-(\gsy@widthofcurrentblank)\relax}
+		\fi
+	\else%
+		\ifgsy@printing%
+			\hspace{\gsy@widthofcurrentblank}%
+		\else
+			#2
+		\fi
+	\fi%
+}
 
 \newcommand{\dm}[1]{\left|\begin{matrix}#1\end{matrix}\right|}
 \newcommand{\bm}[1]{\begin{bmatrix}#1\end{bmatrix}}
