@@ -140,7 +140,7 @@
 	\item%
 }
 
-\newenvironment{solution}[1][10em]{%
+\newcommand{\solnspace}{%
 	\iftoggle{gsy@hassubproblems}{%
 		\global\toggletrue{gsy@lastsubproblemhadsolution}%
 		\vspace{.5\baselineskip}\hrule%
@@ -148,6 +148,10 @@
 			\vspace{#1}%
 		\fi%
 	}{}%
+}
+
+\newenvironment{solution}[1][10em]{%
+	\solnspace
 }{%
 	\iftoggle{gsy@hassubproblems}{
 		\vfill%
