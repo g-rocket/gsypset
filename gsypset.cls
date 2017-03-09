@@ -21,6 +21,7 @@
 \DeclareOption{blanks}{\gsy@blankstrue}
 \DeclareOption{microtype}{\RequirePackage{microtype}}
 \DeclareOption{fullproblemnames}{\gsy@needsproblemfalse}
+\DeclareOption{noproblem}{\gsy@needsproblemfalse}
 \DeclareOption{boxes}{\gsy@boxtrue}
 \DeclareOption{condensed}{\gsy@condensesubproblemstrue\gsy@condensedtrue}
 \DeclareOption{hmc}{%
@@ -67,7 +68,7 @@
 \sisetup{per-mode=fraction}
 \sisetup{qualifier-mode=space}
 \sisetup{retain-explicit-plus}
-\DeclareUnicodeCharacter{00B0}{\degree}
+%\DeclareUnicodeCharacter{00B0}{\degree}
 \DeclareSIUnit{\degreeFarenheight}{\degree{}F}
 \DeclareSIUnit{\Rxn}{Rxn}
 \DeclareSIUnit{\M}{M}
@@ -238,6 +239,7 @@
 }
 
 \newcommand{\subproblem}{%
+	\pagebreak[3]
 	\global\togglefalse{gsy@lastsubproblemhadsolution}%
 	\item%
 }
@@ -372,6 +374,7 @@
 
 
 \newcommand{\dx}[1]{\;\mathrm{d}#1}
+\newcommand{\ds}[1]{\mathrm{d}#1}
 \newcommand{\df}[3][\kern -.5pt]{\frac{\mathrm{d}^{#1}#2}{\mathrm{d}#3^{#1}}}
 \newcommand{\pf}[3][\kern -.5pt]{\frac{\partial^{#1} #2}{\partial #3^{#1}}}
 
